@@ -2,9 +2,8 @@ import { PostgresDb } from "@fastify/postgres";
 import { FastifyBaseLogger } from "fastify";
 import { initGithubApp } from "../github-app.js";
 import { REPOS_TO_WATCH } from "./config.js";
-import { createReleaseIssue } from "./create-release-issue.js";
 
-export async function pollReleases({
+export async function initializeReleases({
   octokit,
   pg,
   logger,
@@ -13,8 +12,11 @@ export async function pollReleases({
   pg: PostgresDb;
   logger: FastifyBaseLogger;
 }) {
-  logger.info("Polling releases");
+  logger.info("Initializing releases");
+
   for (const { owner, repo } of REPOS_TO_WATCH) {
+    logger.info(`Fetching releases for ${owner}/${repo}`);
+
     const { data } = await octokit.rest.repos.listReleases({
       owner,
       repo,
@@ -32,15 +34,9 @@ export async function pollReleases({
         continue;
       }
 
-      logger.info(`Found New release: ${release.name} for ${owner}/${repo}`);
-
-      await createReleaseIssue({
-        octokit,
-        owner,
-        repo,
-        release,
-        logger,
-      });
+      logger.info(
+        `Found New release: ${release.name} for ${owner}/${repo} - inserting into database`
+      );
 
       await pg.query(
         `INSERT INTO releases (release_id, name, repo) VALUES ($1, $2, $3)`,
@@ -48,4 +44,6 @@ export async function pollReleases({
       );
     }
   }
+
+  logger.info("Releases initialized");
 }

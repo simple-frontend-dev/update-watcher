@@ -3,23 +3,33 @@ import fastifyHelmet from "@fastify/helmet";
 import fastifyEnv from "@fastify/env";
 import fastifyPostgres from "@fastify/postgres";
 import { initGithubApp } from "./github-app.js";
-import { pollReleases } from "./releases/poll.js";
+import { initializeReleases } from "./releases/init.js";
 import { initReleasesDatabase } from "./releases/db.js";
+import { pollReleases } from "./releases/poll.js";
+
+const INITIALIZE_RELEASES = true;
+const RELEASES_POLL_INTERVAL = 1000 * 60 * 60 * 4; // 4 hours
 
 async function serverSetup() {
   const fastifyServer = fastify({ logger: true });
 
-  fastifyServer.register(fastifyHelmet);
+  await fastifyServer.register(fastifyHelmet);
+
   await fastifyServer.register(fastifyEnv, {
-    dotenv: {
-      path: ".env",
-    },
+    dotenv: true,
     schema: {
       type: "object",
-      required: ["GITHUB_APP_ID", "GITHUB_PRIVATE_KEY"],
+      required: [
+        "GITHUB_APP_ID",
+        "GITHUB_PRIVATE_KEY",
+        "GITHUB_INSTALLATION_ID",
+        "DATABASE_URL",
+      ],
       properties: {
         GITHUB_APP_ID: { type: "string" },
         GITHUB_PRIVATE_KEY: { type: "string" },
+        GITHUB_INSTALLATION_ID: { type: "number" },
+        DATABASE_URL: { type: "string" },
       },
     },
   });
@@ -31,18 +41,22 @@ async function serverSetup() {
   await initReleasesDatabase(fastifyServer.pg);
 
   const octokit = await initGithubApp({ logger: fastifyServer.log });
-  pollReleases({ octokit, pg: fastifyServer.pg, logger: fastifyServer.log });
 
-  fastifyServer.get("/ping", async (_request, _reply) => {
-    return "pong\n";
-  });
+  if (INITIALIZE_RELEASES) {
+    await initializeReleases({
+      octokit,
+      pg: fastifyServer.pg,
+      logger: fastifyServer.log,
+    });
+  }
 
-  fastifyServer.listen({ port: 8080 }, (err, _address) => {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-  });
+  setInterval(() => {
+    pollReleases({
+      octokit,
+      pg: fastifyServer.pg,
+      logger: fastifyServer.log,
+    });
+  }, RELEASES_POLL_INTERVAL);
 }
 
 serverSetup();
