@@ -25,4 +25,4 @@ jobs:
         env:
           ENV_GITHUB_APP_ID: ${{ secrets.ENV_GITHUB_APP_ID }}
           ENV_GITHUB_PRIVATE_KEY: ${{ secrets.ENV_GITHUB_PRIVATE_KEY }}
-        run: npx tsx packages/frontend-updates-runner/src/create-pull-request.ts
+        run: npx tsx packages/frontend-updates-runner/src/udapte-depency-in-repos.ts
