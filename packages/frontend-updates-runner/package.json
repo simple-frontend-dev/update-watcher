@@ -2,10 +2,7 @@
   "name": "@update-watcher/frontend-updates-runner",
   "version": "0.1.0",
   "type": "module",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js"
-  },
+  "scripts": {},
   "devDependencies": {
     "@types/node": "^22.13.1"
   },
