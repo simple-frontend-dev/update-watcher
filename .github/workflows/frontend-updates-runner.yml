@@ -30,4 +30,4 @@ jobs:
           ENV_GITHUB_APP_ID: ${{ secrets.ENV_GITHUB_APP_ID }}
           ENV_GITHUB_PRIVATE_KEY: ${{ secrets.ENV_GITHUB_PRIVATE_KEY }}
           ENV_COMMIT_MESSAGE: ${{ env.commit_message }}
-        run: npx tsx packages/frontend-updates-runner/src/udapte-depency-in-repos.ts
+        run: npx tsx packages/frontend-updates-runner/src/update-depency-in-repos.ts

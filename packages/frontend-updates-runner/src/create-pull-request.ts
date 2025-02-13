@@ -9,6 +9,7 @@ export async function createPullRequest({
   base,
   packageName,
   packageVersion,
+  updateBody,
 }: {
   octokitWithAuth: Octokit;
   owner: string;
@@ -18,6 +19,7 @@ export async function createPullRequest({
   base: string;
   packageName: string;
   packageVersion: string;
+  updateBody: string;
 }) {
   const { data } = await octokitWithAuth.rest.pulls.create({
     owner,
@@ -33,7 +35,7 @@ export async function createPullRequest({
     owner,
     repo,
     pull_number: data.number,
-    body: `${previousBody}This PR was created by Simple Frontend (Jeremy) following an important release for ${packageName}.`,
+    body: `${previousBody}This PR was created by Simple Frontend (Jeremy) following an important release for ${packageName}.\n\n## Summary\n\n${updateBody}`,
   });
 
   console.log(`Pull request created: ${owner}/${repo}#${data.number}`);

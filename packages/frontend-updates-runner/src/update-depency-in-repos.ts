@@ -8,6 +8,7 @@ import {
 import { packageInRepo } from "./check-package-in-repo.js";
 import { execSync } from "child_process";
 import { createPullRequest } from "./create-pull-request.js";
+import { getUpdateBody } from "./get-update-body.js";
 
 const PACKAGE = "typescript";
 const VERSION = "beta";
@@ -15,11 +16,12 @@ const VERSION = "beta";
 export async function updateDependencyInRepos({
   packageName,
   packageVersion,
+  updateBody,
 }: {
   packageName: string;
   packageVersion: string;
+  updateBody: string;
 }) {
-  console.log(`Updating dependency: ${process.env.ENV_COMMIT_MESSAGE}`);
   const app = getOctokitApp();
 
   for await (const { installation } of app.eachInstallation.iterator()) {
@@ -98,6 +100,7 @@ export async function updateDependencyInRepos({
           base: "main",
           packageName,
           packageVersion,
+          updateBody,
         });
       } catch (error) {
         console.error(error);
@@ -106,7 +109,34 @@ export async function updateDependencyInRepos({
   }
 }
 
-updateDependencyInRepos({
-  packageName: PACKAGE,
-  packageVersion: VERSION,
-});
+async function run() {
+  try {
+    const commitMessage = process.env.ENV_COMMIT_MESSAGE!;
+    const [packageName, packageVersion] = commitMessage
+      .split(":")[1]
+      ?.split("@")!;
+
+    if (!packageName || !packageVersion) {
+      throw new Error("Invalid commit message");
+    }
+
+    const updateBody = await getUpdateBody({
+      packageName,
+      packageVersion,
+    });
+
+    console.log(
+      `Updating dependency in repos: ${packageName}@${packageVersion}`,
+    );
+
+    updateDependencyInRepos({
+      packageName: PACKAGE,
+      packageVersion: VERSION,
+      updateBody,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+run();
