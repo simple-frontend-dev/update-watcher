@@ -35,7 +35,7 @@ GRANT CREATE ON SCHEMA public TO local_user;
 
 ## Architecture
 
-Can initialize a release database with the last 10 releases of a given repository
+Can initialize a release database with the last 10 releases of a given repository.
 
 Polls every 4 hours these repoositories for updates and if found then it creates an issue in https://github.com/simple-frontend-dev/update-watcher/issues with the release metadata
 
