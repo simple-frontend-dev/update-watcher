@@ -34,8 +34,13 @@ export async function updateDependencyInRepos({
         });
 
         const git = simpleGit()
-          .addConfig("user.email", "noreply@simplefrontend.dev")
-          .addConfig("user.name", "Simple Frontend (Jeremy)");
+          .addConfig(
+            "user.email",
+            "noreply@simplefrontend.dev",
+            false,
+            "global",
+          )
+          .addConfig("user.name", "Simple Frontend (Jeremy)", false, "global");
 
         const cloneUrl = `https://x-access-token:${token.token}@github.com/${repository.full_name}.git`;
         await git.clone(cloneUrl, `repositories/${repository.full_name}`);
