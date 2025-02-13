@@ -10,6 +10,9 @@
     "@types/node": "^22.13.1"
   },
   "dependencies": {
-    "octokit": "^4.1.0"
+    "@octokit/auth-app": "^7.1.4",
+    "dotenv": "^16.4.7",
+    "octokit": "^4.1.0",
+    "simple-git": "^3.27.0"
   }
 }
