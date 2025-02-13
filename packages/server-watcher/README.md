@@ -1,5 +1,7 @@
 # Server Watcher
 
+Watches frontend repositories releases and creates [issues](https://github.com/simple-frontend-dev/update-watcher/issues)
+
 ## Setup
 
 ### Dependencies
