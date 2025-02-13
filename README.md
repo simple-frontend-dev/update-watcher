@@ -8,4 +8,4 @@ Watches frontend repositories releases and creates [issues](https://github.com/s
 
 ### Dependencies
 
-Managed with pnpm workspaces: `pnpm install` at the root
+Managed with pnpm workspaces: `pnpm install` at the root.
