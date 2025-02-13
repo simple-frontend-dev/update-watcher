@@ -21,8 +21,13 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Get last commit message
+        id: commit
+        run: echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
       - name: Run frontend updates runner
+        if: contains(env.commit_message, 'trigger-frontend-updates')
         env:
           ENV_GITHUB_APP_ID: ${{ secrets.ENV_GITHUB_APP_ID }}
           ENV_GITHUB_PRIVATE_KEY: ${{ secrets.ENV_GITHUB_PRIVATE_KEY }}
+          ENV_COMMIT_MESSAGE: ${{ env.commit_message }}
         run: npx tsx packages/frontend-updates-runner/src/udapte-depency-in-repos.ts

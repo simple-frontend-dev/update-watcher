@@ -33,7 +33,7 @@ export async function createPullRequest({
     owner,
     repo,
     pull_number: data.number,
-    body: `${previousBody} - Chore: Update ${packageName} to ${packageVersion}\n\nThis PR was created by Simple Frontend (Jeremy) following an important release.`,
+    body: `${previousBody}This PR was created by Simple Frontend (Jeremy) following an important release for ${packageName}.`,
   });
 
   console.log(`Pull request created: ${owner}/${repo}#${data.number}`);

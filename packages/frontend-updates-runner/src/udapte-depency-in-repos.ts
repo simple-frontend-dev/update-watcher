@@ -19,6 +19,9 @@ export async function updateDependencyInRepos({
   packageName: string;
   packageVersion: string;
 }) {
+  console.log(
+    `Updating dependency in repos: ${process.env.ENV_COMMIT_MESSAGE}`,
+  );
   const app = getOctokitApp();
 
   for await (const { installation } of app.eachInstallation.iterator()) {
