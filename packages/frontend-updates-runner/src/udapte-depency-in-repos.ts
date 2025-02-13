@@ -95,6 +95,8 @@ export async function updateDependencyInRepos({
           title: `chore: update ${packageName} to ${packageVersion}`,
           head: branchName,
           base: "main",
+          packageName,
+          packageVersion,
         });
       } catch (error) {
         console.error(error);
