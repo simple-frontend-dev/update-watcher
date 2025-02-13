@@ -11,4 +11,8 @@ export const REPOS_TO_WATCH = [
     owner: "pnpm",
     repo: "pnpm",
   },
+  {
+    owner: "prettier",
+    repo: "prettier",
+  },
 ];
