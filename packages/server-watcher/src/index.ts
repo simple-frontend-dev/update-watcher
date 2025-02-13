@@ -7,7 +7,7 @@ import { initializeReleases } from "./releases/init.js";
 import { initReleasesDatabase } from "./releases/db.js";
 import { pollReleases } from "./releases/poll.js";
 
-const INITIALIZE_RELEASES = true;
+const INITIALIZE_RELEASES = false;
 const RELEASES_POLL_INTERVAL = 1000 * 60 * 60 * 4; // 4 hours
 
 async function serverSetup() {
