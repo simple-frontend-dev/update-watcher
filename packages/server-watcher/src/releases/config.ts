@@ -31,4 +31,8 @@ export const REPOS_TO_WATCH = [
     owner: "eslint",
     repo: "eslint",
   },
+  {
+    owner: "withastro",
+    repo: "astro",
+  },
 ];
