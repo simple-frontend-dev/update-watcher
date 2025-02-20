@@ -1,0 +1,15 @@
+{
+  "name": "@update-watcher/frontend-updates-runner",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "@types/node": "^22.13.1"
+  },
+  "dependencies": {
+    "@octokit/auth-app": "^7.1.4",
+    "dotenv": "^16.4.7",
+    "octokit": "^4.1.0",
+    "simple-git": "^3.27.0"
+  }
+}

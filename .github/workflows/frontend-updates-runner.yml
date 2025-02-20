@@ -1,0 +1,32 @@
+name: Frontend Updates runner
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/frontend-updates-runner/**"
+
+jobs:
+  frontend-updates-runner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Get last commit message
+        id: commit
+        run: echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+      - name: Run frontend updates runner
+        if: contains(env.commit_message, 'trigger-frontend-updates')
+        env:
+          ENV_GITHUB_APP_ID: ${{ secrets.ENV_GITHUB_APP_ID }}
+          ENV_GITHUB_PRIVATE_KEY: ${{ secrets.ENV_GITHUB_PRIVATE_KEY }}
+          ENV_COMMIT_MESSAGE: ${{ env.commit_message }}
+        run: npx tsx packages/frontend-updates-runner/src/update-depency-in-repos.ts
