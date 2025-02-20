@@ -35,7 +35,7 @@ export async function createPullRequest({
     owner,
     repo,
     pull_number: data.number,
-    body: `${previousBody}This PR was created by Simple Frontend (Jeremy) following an important release for ${packageName}.\n\n## Summary\n\n${updateBody}`,
+    body: `${previousBody}This PR was created by Simple Frontend (Jeremy) following an important release for ${packageName}.\n\n${updateBody}`,
   });
 
   console.log(`Pull request created: ${owner}/${repo}#${data.number}`);
