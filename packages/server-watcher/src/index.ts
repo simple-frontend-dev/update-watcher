@@ -7,7 +7,6 @@ import { initializeReleases } from "./releases/init.js";
 import { initReleasesDatabase } from "./releases/db.js";
 import { pollReleases } from "./releases/poll.js";
 
-const INITIALIZE_RELEASES = false;
 const RELEASES_POLL_INTERVAL = 1000 * 60 * 60 * 4; // 4 hours
 
 async function serverSetup() {
@@ -42,7 +41,8 @@ async function serverSetup() {
 
   const octokit = await initGithubApp({ logger: fastifyServer.log });
 
-  if (INITIALIZE_RELEASES) {
+  const initializeReleasesFlag = process.env.INITIALIZE_RELEASES === "true";
+  if (initializeReleasesFlag) {
     await initializeReleases({
       octokit,
       pg: fastifyServer.pg,
