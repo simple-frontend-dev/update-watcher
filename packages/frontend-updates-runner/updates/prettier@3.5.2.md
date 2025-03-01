@@ -1,4 +1,4 @@
-# 3.5.2 release for prettier
+# Prettier 3.5.2
 
 Patch update for Prettier, nothing noteworthy. This is to mostly to test frontend-update integration end to end.
 
