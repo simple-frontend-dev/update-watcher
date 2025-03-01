@@ -84,15 +84,17 @@ export async function updateDependencyInRepos({
           continue;
         }
 
+        const commitMessage = `chore: update ${packageName} to ${packageVersion}`;
+
         await git.add("./*");
-        await git.commit("chore: update dependencies");
+        await git.commit(commitMessage);
         await git.push("origin", branchName);
 
         await createPullRequest({
           octokitWithAuth,
           owner: repository.owner.login,
           repo: repository.name,
-          title: `chore: update ${packageName} to ${packageVersion}`,
+          title: commitMessage,
           head: branchName,
           base: repository.default_branch,
           packageName,
