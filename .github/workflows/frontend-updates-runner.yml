@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: lts/*
           cache: "pnpm"
+          cache-dependency-path: frontend-updates-runner/pnpm-lock.yaml
 
       - name: Get last commit message
         id: commit
