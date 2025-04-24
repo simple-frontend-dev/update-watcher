@@ -86,21 +86,24 @@ export async function updateDependencyInRepos({
 
         const commitMessage = `chore: update ${packageName} to ${packageVersion}`;
 
+        console.log(await git.status());
         await git.add(".");
+        console.log(await git.status());
+
         await git.commit(commitMessage);
         await git.push("origin", branchName);
 
-        await createPullRequest({
-          octokitWithAuth,
-          owner: repository.owner.login,
-          repo: repository.name,
-          title: commitMessage,
-          head: branchName,
-          base: repository.default_branch,
-          packageName,
-          packageVersion,
-          updateBody,
-        });
+        // await createPullRequest({
+        //   octokitWithAuth,
+        //   owner: repository.owner.login,
+        //   repo: repository.name,
+        //   title: commitMessage,
+        //   head: branchName,
+        //   base: repository.default_branch,
+        //   packageName,
+        //   packageVersion,
+        //   updateBody,
+        // });
       } catch (error) {
         console.error(error);
       }
