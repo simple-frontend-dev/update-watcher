@@ -86,7 +86,7 @@ export async function updateDependencyInRepos({
 
         const commitMessage = `chore: update ${packageName} to ${packageVersion}`;
 
-        await git.add("./*");
+        await git.add(".");
         await git.commit(commitMessage);
         await git.push("origin", branchName);
 
