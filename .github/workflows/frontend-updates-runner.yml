@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/frontend-updates-runner.yml"
       - "packages/frontend-updates-runner/**"
 
 jobs:
@@ -17,6 +18,8 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend-updates-runner/package.json
 
       - uses: actions/setup-node@v4
         with:
