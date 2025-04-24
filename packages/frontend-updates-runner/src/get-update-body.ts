@@ -13,7 +13,7 @@ export async function getUpdateBody({
       import.meta.dirname,
       "..",
       "updates",
-      `${packageName}@${packageVersion}.md`,
+      `${packageName.replaceAll("/", "_")}@${packageVersion}.md`,
     ),
     "utf-8",
   );
