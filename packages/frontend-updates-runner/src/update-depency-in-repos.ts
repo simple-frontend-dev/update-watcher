@@ -111,9 +111,11 @@ export async function updateDependencyInRepos({
 async function run() {
   try {
     const commitMessage = process.env.ENV_COMMIT_MESSAGE!;
-    const [packageName, packageVersion] = commitMessage
-      .split(":")[1]
-      ?.split("@")!;
+    const packageNameVersion = commitMessage.split(":")[1];
+
+    const lastAt = packageNameVersion?.lastIndexOf("@")!;
+    const packageName = packageNameVersion?.slice(0, lastAt);
+    const packageVersion = packageNameVersion?.slice(lastAt + 1);
 
     if (!packageName || !packageVersion) {
       throw new Error("Invalid commit message");
