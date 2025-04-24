@@ -11,10 +11,7 @@ import { execSync } from "child_process";
 import { createPullRequest } from "./create-pull-request.js";
 import { getUpdateBody } from "./get-update-body.js";
 
-const REPOSITORIES_PATH = resolve(
-  process.env.GITHUB_WORKSPACE!,
-  "repositories",
-);
+const REPOSITORIES_PATH = resolve(process.env.GITHUB_WORKSPACE!, "repositories");
 
 export async function updateDependencyInRepos({
   packageName,
@@ -40,12 +37,7 @@ export async function updateDependencyInRepos({
         });
 
         const git = simpleGit()
-          .addConfig(
-            "user.email",
-            "noreply@simplefrontend.dev",
-            false,
-            "global",
-          )
+          .addConfig("user.email", "noreply@simplefrontend.dev", false, "global")
           .addConfig("user.name", "Simple Frontend (Jeremy)", false, "global");
 
         const cloneUrl = `https://x-access-token:${token.token}@github.com/${repository.full_name}.git`;
@@ -69,10 +61,8 @@ export async function updateDependencyInRepos({
           continue;
         }
 
-        const packageManagerVersion = execSync(
-          `${packageManager} --version`,
-        ).toString();
-        console.log(`Package manager version: ${packageManagerVersion}`);
+        const packageManagerVersion = execSync(`${packageManager} --version`).toString();
+        console.log(`Package manager: ${packageManager} v${packageManagerVersion}`);
 
         const packageManagerInstallCommand = getPackageManagerInstallCommand({
           packageManager,
@@ -99,27 +89,24 @@ export async function updateDependencyInRepos({
           continue;
         }
 
-        const commitMessage = `chore: update ${packageName} to ${packageVersion}`;
-
-        console.log(await git.status());
         await git.add("./*");
 
-        console.log(await git.status());
+        const commitMessage = `chore: update ${packageName} to ${packageVersion}`;
 
-        // await git.commit(commitMessage);
-        // await git.push("origin", branchName);
+        await git.commit(commitMessage);
+        await git.push("origin", branchName);
 
-        // await createPullRequest({
-        //   octokitWithAuth,
-        //   owner: repository.owner.login,
-        //   repo: repository.name,
-        //   title: commitMessage,
-        //   head: branchName,
-        //   base: repository.default_branch,
-        //   packageName,
-        //   packageVersion,
-        //   updateBody,
-        // });
+        await createPullRequest({
+          octokitWithAuth,
+          owner: repository.owner.login,
+          repo: repository.name,
+          title: commitMessage,
+          head: branchName,
+          base: repository.default_branch,
+          packageName,
+          packageVersion,
+          updateBody,
+        });
       } catch (error) {
         console.error(error);
       }
@@ -145,9 +132,7 @@ async function run() {
       packageVersion,
     });
 
-    console.log(
-      `Updating dependency in repos: ${packageName}@${packageVersion}`,
-    );
+    console.log(`Updating dependency in repos: ${packageName}@${packageVersion}`);
 
     updateDependencyInRepos({
       packageName,
