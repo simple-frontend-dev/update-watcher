@@ -8,4 +8,4 @@
 
 ## Setup
 
-pnpm with workspaces: `pnpm install` at the root to install.
+pnpm with workspaces: `pnpm install` at the root to install dependencies.
