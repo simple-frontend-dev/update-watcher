@@ -27,14 +27,16 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: frontend-updates-runner/pnpm-lock.yaml
 
-      - name: Get last commit message
-        id: commit
-        run: echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: |
           cd frontend-updates-runner
           pnpm install
+
+      - name: Get last commit message
+        id: commit
+        run: |
+          cd frontend-updates-runner
+          echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
       - name: Run frontend updates runner
         if: contains(env.commit_message, 'trigger-frontend-updates')
