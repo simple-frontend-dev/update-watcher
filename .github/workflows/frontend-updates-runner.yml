@@ -45,5 +45,5 @@ jobs:
           ENV_GITHUB_PRIVATE_KEY: ${{ secrets.ENV_GITHUB_PRIVATE_KEY }}
           ENV_COMMIT_MESSAGE: ${{ env.commit_message }}
         run: |
-          cd frontend-updates-runner
+          cd frontend-updates-runner/packages/frontend-updates-runner
           npx tsx src/update-depency-in-repos.ts
