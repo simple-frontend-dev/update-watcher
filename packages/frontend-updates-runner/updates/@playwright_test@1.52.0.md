@@ -23,4 +23,4 @@ await expect(locator).toMatchAriaSnapshot(`
 `);
 ```
 
-[Full release notes](https://github.com/microsoft/playwright/releases/tag/v1.52.0)
+[Full release notes:](https://github.com/microsoft/playwright/releases/tag/v1.52.0)
