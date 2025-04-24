@@ -1,5 +1,5 @@
 import { simpleGit } from "simple-git";
-import { join } from "path";
+import { join, resolve } from "path";
 import { getOctokitApp, getTokenAndOctokitWithAuth } from "./github-auth.js";
 import {
   getPackageManager,
@@ -10,6 +10,11 @@ import { packageInRepo } from "./check-package-in-repo.js";
 import { execSync } from "child_process";
 import { createPullRequest } from "./create-pull-request.js";
 import { getUpdateBody } from "./get-update-body.js";
+
+const REPOSITORIES_PATH = resolve(
+  process.env.GITHUB_WORKSPACE!,
+  "repositories",
+);
 
 export async function updateDependencyInRepos({
   packageName,
@@ -44,13 +49,8 @@ export async function updateDependencyInRepos({
           .addConfig("user.name", "Simple Frontend (Jeremy)", false, "global");
 
         const cloneUrl = `https://x-access-token:${token.token}@github.com/${repository.full_name}.git`;
-        await git.clone(cloneUrl, `repositories/${repository.full_name}`);
-
-        const repoPath = join(
-          process.cwd(),
-          "repositories",
-          repository.full_name,
-        );
+        const repoPath = join(REPOSITORIES_PATH, repository.full_name);
+        await git.clone(cloneUrl, repoPath);
 
         if (!packageInRepo({ packageName, repoPath })) {
           console.log(`${packageName} not found in ${repository.full_name}`);
@@ -106,8 +106,8 @@ export async function updateDependencyInRepos({
 
         console.log(await git.status());
 
-        await git.commit(commitMessage);
-        await git.push("origin", branchName);
+        // await git.commit(commitMessage);
+        // await git.push("origin", branchName);
 
         // await createPullRequest({
         //   octokitWithAuth,
