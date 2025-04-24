@@ -38,6 +38,18 @@ jobs:
           cd frontend-updates-runner
           echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
+      - name: Import GPG key
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.ENV_GPG_PRIVATE_KEY }}
+
+      - name: Configure git to sign
+        run: |
+          git config --global user.signingkey "${{ secrets.ENV_GPG_KEY_ID }}"
+          git config --global commit.gpgsign true
+          git config --global gpg.program gpg
+
       - name: Run frontend updates runner
         if: contains(env.commit_message, 'trigger-frontend-updates')
         env:
