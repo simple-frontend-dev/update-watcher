@@ -30,7 +30,24 @@ export function getPackageManager({
   return "unknown";
 }
 
-function getPackageManagerInstallCommand({
+export function getPackageManagerInstallCommand({
+  packageManager,
+}: {
+  packageManager: PackageManager;
+}): string {
+  switch (packageManager) {
+    case "npm":
+      return "npm install";
+    case "yarn":
+      return "yarn install";
+    case "pnpm":
+      return "pnpm install";
+    default:
+      throw new Error("Unknown package manager");
+  }
+}
+
+function getPackageManagerAddCommand({
   packageManager,
 }: {
   packageManager: PackageManager;
@@ -47,7 +64,7 @@ function getPackageManagerInstallCommand({
   }
 }
 
-export function getPackageManagerCommand({
+export function getPackageManagerUpdateCommand({
   packageManager,
   repoPath,
   packageName,
@@ -58,7 +75,7 @@ export function getPackageManagerCommand({
   packageName: string;
   packageVersion: string;
 }): string {
-  const installCommand = `${getPackageManagerInstallCommand({
+  const addCommand = `${getPackageManagerAddCommand({
     packageManager,
   })} ${packageName}@${packageVersion}`;
   switch (packageManager) {
@@ -67,22 +84,22 @@ export function getPackageManagerCommand({
         readFileSync(join(repoPath, "package.json"), "utf8"),
       ).workspaces;
       if (yarnWorkspaces) {
-        return `${installCommand} -W`;
+        return `${addCommand} -W`;
       } else {
-        return installCommand;
+        return addCommand;
       }
     case "pnpm":
       try {
         const pnpmWorkspaces = statSync(join(repoPath, "pnpm-workspace.yaml"));
         if (pnpmWorkspaces.isFile()) {
-          return `${installCommand} -w`;
+          return `${addCommand} -w`;
         } else {
-          return installCommand;
+          return addCommand;
         }
       } catch (e) {
-        return installCommand;
+        return addCommand;
       }
     default:
-      return installCommand;
+      return addCommand;
   }
 }

@@ -3,7 +3,8 @@ import { join } from "path";
 import { getOctokitApp, getTokenAndOctokitWithAuth } from "./github-auth.js";
 import {
   getPackageManager,
-  getPackageManagerCommand,
+  getPackageManagerInstallCommand,
+  getPackageManagerUpdateCommand,
 } from "./package-manager.js";
 import { packageInRepo } from "./check-package-in-repo.js";
 import { execSync } from "child_process";
@@ -67,14 +68,28 @@ export async function updateDependencyInRepos({
           console.warn(`Unknown package manager for ${repository.full_name}`);
           continue;
         }
-        const packageManagerCommand = getPackageManagerCommand({
+
+        const packageManagerVersion = execSync(
+          `${packageManager} --version`,
+        ).toString();
+        console.log(`Package manager version: ${packageManagerVersion}`);
+
+        const packageManagerInstallCommand = getPackageManagerInstallCommand({
+          packageManager,
+        });
+        console.log(`Running ${packageManagerInstallCommand}`);
+        execSync(`${packageManagerInstallCommand}`, {
+          cwd: repoPath,
+        });
+
+        const packageManagerUpdateCommand = getPackageManagerUpdateCommand({
           packageManager,
           repoPath,
           packageName,
           packageVersion,
         });
-        console.log(`Running ${packageManagerCommand}`);
-        execSync(`${packageManagerCommand}`, {
+        console.log(`Running ${packageManagerUpdateCommand}`);
+        execSync(`${packageManagerUpdateCommand}`, {
           cwd: repoPath,
         });
 
@@ -87,7 +102,8 @@ export async function updateDependencyInRepos({
         const commitMessage = `chore: update ${packageName} to ${packageVersion}`;
 
         console.log(await git.status());
-        await git.add(".");
+        await git.add("./*");
+
         console.log(await git.status());
 
         await git.commit(commitMessage);
