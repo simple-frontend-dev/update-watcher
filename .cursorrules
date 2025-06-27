@@ -1,0 +1,39 @@
+# Update Watcher Project Rules
+
+## Project Context
+
+This is an update-watcher project that automates package updates across repositories. It consists of:
+
+- `packages/frontend-updates-runner`: Creates PRs to update frontend packages
+
+## Coding Style & Preferences
+
+- Use TypeScript for all new code
+- Follow existing code patterns and naming conventions
+- Prefer async/await over promises
+- Use descriptive variable and function names
+
+## Update File Format
+
+When creating update files in `packages/frontend-updates-runner/updates/`:
+
+- Use the format `packageName@version.md`
+- Include key changes with bold headers but not in markdown headers
+- Be concise but comprehensive
+- Include migration notes when relevant
+- Link to official documentation/changelogs
+- Do not use emojis sparingly
+
+## Git Workflow
+
+- Commit update files with format: `trigger-frontend-updates:packageName@version`
+- Stage files before committing
+- Use descriptive commit messages
+
+## Communication Style
+
+- Be direct and actionable
+- Provide clear next steps
+- Explain the "why" behind recommendations
+- Use bullet points for lists of changes
+- Keep responses focused on the task at hand
