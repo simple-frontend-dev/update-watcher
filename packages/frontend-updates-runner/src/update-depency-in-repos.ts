@@ -10,6 +10,7 @@ import { packageInRepo } from "./check-package-in-repo.js";
 import { execSync } from "child_process";
 import { createPullRequest } from "./create-pull-request.js";
 import { getUpdateBody } from "./get-update-body.js";
+import { getRepositoryPullRequestTemplate } from "./get-repository-pull-request-template.js";
 
 const REPOSITORIES_PATH = resolve(process.env.GITHUB_WORKSPACE!, "repositories");
 
@@ -34,6 +35,12 @@ export async function updateDependencyInRepos({
         const { token, octokitWithAuth } = await getTokenAndOctokitWithAuth({
           octokit,
           installationId: installation.id,
+        });
+
+        const template = await getRepositoryPullRequestTemplate({
+          octokitWithAuth,
+          owner: repository.owner.login,
+          repo: repository.name,
         });
 
         const git = simpleGit()
@@ -106,6 +113,7 @@ export async function updateDependencyInRepos({
           packageName,
           packageVersion,
           updateBody,
+          template,
         });
       } catch (error) {
         console.error(error);
