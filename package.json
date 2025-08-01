@@ -7,7 +7,7 @@
   "packageManager": "pnpm@10.9.0",
   "devDependencies": {
     "prettier": "^3.6.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.7.3"
   },
   "scripts": {
     "build": "pnpm -r build",
