@@ -22,7 +22,7 @@ When creating update files in `packages/frontend-updates-runner/updates/`:
 - Be concise but comprehensive
 - Include migration notes when relevant
 - Link to official documentation/changelogs
-- Do not use emojis sparingly
+- Do not use emojis
 
 ## Git Workflow
 
@@ -37,3 +37,11 @@ When creating update files in `packages/frontend-updates-runner/updates/`:
 - Explain the "why" behind recommendations
 - Use bullet points for lists of changes
 - Keep responses focused on the task at hand
+
+## Information Accuracy
+
+- **Never fabricate or guess information** - only use verified facts
+- When creating update files, only include information from official sources
+- If official documentation/release notes don't exist yet, be transparent about this
+- Link to actual, existing resources rather than hypothetical ones
+- When uncertain about details, err on the side of caution and note what's unknown
