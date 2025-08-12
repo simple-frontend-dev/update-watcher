@@ -27,6 +27,11 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: frontend-updates-runner/pnpm-lock.yaml
 
+      - name: Install corepack
+        run: |
+          npm install --global corepack@latest
+          corepack enable
+
       - name: Install dependencies
         run: |
           cd frontend-updates-runner

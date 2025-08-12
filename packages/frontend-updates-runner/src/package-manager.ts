@@ -3,11 +3,7 @@ import { join } from "path";
 
 type PackageManager = "npm" | "yarn" | "pnpm" | "unknown";
 
-export function getPackageManager({
-  repoPath,
-}: {
-  repoPath: string;
-}): PackageManager {
+export function getPackageManager({ repoPath }: { repoPath: string }): PackageManager {
   try {
     const packageLockfile = statSync(join(repoPath, "package-lock.json"));
     if (packageLockfile.isFile()) {
@@ -30,11 +26,7 @@ export function getPackageManager({
   return "unknown";
 }
 
-export function getPackageManagerInstallCommand({
-  packageManager,
-}: {
-  packageManager: PackageManager;
-}): string {
+export function getPackageManagerInstallCommand({ packageManager }: { packageManager: PackageManager }): string {
   switch (packageManager) {
     case "npm":
       return "npm install";
@@ -47,11 +39,7 @@ export function getPackageManagerInstallCommand({
   }
 }
 
-function getPackageManagerAddCommand({
-  packageManager,
-}: {
-  packageManager: PackageManager;
-}): string {
+function getPackageManagerAddCommand({ packageManager }: { packageManager: PackageManager }): string {
   switch (packageManager) {
     case "npm":
       return "npm install";
@@ -80,10 +68,8 @@ export function getPackageManagerUpdateCommand({
   })} ${packageName}@${packageVersion}`;
   switch (packageManager) {
     case "yarn":
-      const yarnWorkspaces = JSON.parse(
-        readFileSync(join(repoPath, "package.json"), "utf8"),
-      ).workspaces;
-      if (yarnWorkspaces) {
+      const yarnWorkspaces = JSON.parse(readFileSync(join(repoPath, "package.json"), "utf8")).workspaces;
+      if (yarnWorkspaces && packageVersion.startsWith("1.")) {
         return `${addCommand} -W`;
       } else {
         return addCommand;

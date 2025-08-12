@@ -32,6 +32,11 @@ export async function updateDependencyInRepos({
       try {
         console.log(`Working on repository: ${repository.full_name}`);
 
+        if (!repository.full_name.endsWith("front")) {
+          console.log(`Skipping repository: ${repository.full_name}`);
+          continue;
+        }
+
         const { token, octokitWithAuth } = await getTokenAndOctokitWithAuth({
           octokit,
           installationId: installation.id,
