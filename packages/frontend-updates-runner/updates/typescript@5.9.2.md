@@ -59,4 +59,4 @@ New preview feature that allows expanding quick info tooltips to see deeper type
 - [TypeScript 5.9 Release Notes](https://devblogs.microsoft.com/typescript/announcing-typescript-5-9/)
 - [TypeScript Configuration Reference](https://www.typescriptlang.org/tsconfig/)
 
-Happy update!
+Happy update
