@@ -62,6 +62,7 @@ export async function updateDependencyInRepos({
         }
 
         git.cwd(repoPath);
+
         const branchName = `chore/update-${packageName}-to-${packageVersion}`;
         await git.checkoutLocalBranch(branchName);
 
@@ -73,7 +74,9 @@ export async function updateDependencyInRepos({
           continue;
         }
 
-        const packageManagerVersion = execSync(`${packageManager} --version`).toString();
+        const packageManagerVersion = execSync(`${packageManager} --version`, {
+          cwd: repoPath,
+        }).toString();
         console.log(`Package manager: ${packageManager} v${packageManagerVersion}`);
 
         const packageManagerInstallCommand = getPackageManagerInstallCommand({
